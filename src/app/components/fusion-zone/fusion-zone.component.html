@@ -1,0 +1,60 @@
+<form (ngSubmit)="fuseProcess()" [formGroup]="fusionContrainer">
+  <mat-grid-list cols="3" rowHeight="1:1">
+    <mat-grid-tile>
+      <app-fusion-first-meeb></app-fusion-first-meeb>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <app-fusion-second-meeb></app-fusion-second-meeb>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <form class="form-container">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Meeb Result</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Meeb Role</mat-label>
+              <input
+                matInput
+                [ngStyle]="{ 'font-weight': 'bold', color: 'black' }"
+                [readonly]="true"
+                id="meebRole"
+                [value]="resultMeebRole"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Body Level</mat-label>
+              <input
+                matInput
+                [ngStyle]="{ 'font-weight': 'bold', color: 'black' }"
+                [readonly]="true"
+                [value]="resultLevelLabel"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Body Type</mat-label>
+              <input
+                matInput
+                [ngStyle]="{ 'font-weight': 'bold', color: 'black' }"
+                [readonly]="true"
+                [value]="resultBodyType"
+              />
+            </mat-form-field>
+          </mat-card-content>
+          <mat-card-actions> </mat-card-actions>
+        </mat-card>
+      </form>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <section>
+    <div class="fuseButtonZone">
+      <button type="submit" id="fuseButton" mat-raised-button color="primary">
+        Simulate Fusion
+      </button>
+    </div>
+  </section>
+</form>
