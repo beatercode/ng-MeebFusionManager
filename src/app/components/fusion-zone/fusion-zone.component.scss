@@ -1,28 +1,23 @@
-.full-width{
-    width: 95%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-}
-
-.half-row{
-    width: 45%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-}
-
-.top-padding{
-    padding-top: 1%;
-}
-
-.form-container{
-    margin-top: 5%;
-}
-
 .fuseButtonZone {
-    text-align: center;
-    align-items: center;
+  text-align: center;
+  margin-top: 10px;
+}
 
-    #fuseButton {
-        width: 10%;
-    }
+.form-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.matInput {
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.cardTitle {
+  text-align: center;
+  margin-top: 10px;
+}
+
+table {
+  width: 100%;
 }

@@ -1,21 +1,70 @@
 <form (ngSubmit)="fuseProcess()" [formGroup]="fusionContrainer">
-  <mat-grid-list cols="3" rowHeight="1:1">
-    <mat-grid-tile>
-      <app-fusion-first-meeb></app-fusion-first-meeb>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
-      <app-fusion-second-meeb></app-fusion-second-meeb>
-    </mat-grid-tile>
-
-    <mat-grid-tile>
+  <div class="border d-flex align-items-center justify-content-center dioScemo">
+    <mat-grid-list cols="1">
       <form class="form-container">
+        <!-- FIRST MEEB -->
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Meeb Result</mat-card-title>
+            <mat-card-title>1° Meeb Info</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <mat-form-field appearance="fill" class="full-width">
+            <mat-form-field appearance="fill" class="matInput">
+              <mat-label>Body Level</mat-label>
+              <input
+                matInput
+                placeholder="Body Level"
+                formControlName="firstBodyLevel"
+                value=""
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="matInput">
+              <mat-label>Body Type</mat-label>
+              <mat-select formControlName="firstMeebBodyType">
+                <mat-option
+                  *ngFor="let type of types"
+                  value="{{ type.name }}"
+                  >{{ type.name }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- SECOND MEEB -->
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>2° Meeb Info</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field appearance="fill" class="matInput">
+              <mat-label>Body Level</mat-label>
+              <input
+                matInput
+                placeholder="Body Level"
+                formControlName="secondBodyLevel"
+                value=""
+              />
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="matInput">
+              <mat-label>Body Type</mat-label>
+              <mat-select formControlName="secondMeebBodyType">
+                <mat-option
+                  *ngFor="let type of types"
+                  value="{{ type.name }}"
+                  >{{ type.name }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- RESULT MEEB -->
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Simulation Result</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field appearance="fill" class="matInput">
               <mat-label>Meeb Role</mat-label>
               <input
                 matInput
@@ -25,7 +74,7 @@
                 [value]="resultMeebRole"
               />
             </mat-form-field>
-            <mat-form-field appearance="fill" class="full-width">
+            <mat-form-field appearance="fill" class="matInput">
               <mat-label>Body Level</mat-label>
               <input
                 matInput
@@ -34,7 +83,7 @@
                 [value]="resultLevelLabel"
               />
             </mat-form-field>
-            <mat-form-field appearance="fill" class="full-width">
+            <mat-form-field appearance="fill" class="matInput">
               <mat-label>Body Type</mat-label>
               <input
                 matInput
@@ -44,17 +93,40 @@
               />
             </mat-form-field>
           </mat-card-content>
-          <mat-card-actions> </mat-card-actions>
         </mat-card>
       </form>
-    </mat-grid-tile>
-  </mat-grid-list>
+    </mat-grid-list>
 
-  <section>
-    <div class="fuseButtonZone">
-      <button type="submit" id="fuseButton" mat-raised-button color="primary">
-        Simulate Fusion
-      </button>
+    <div style="margin-top: 16px; text-align: center;">
+      <p style="font-size: 28px">
+        90+% chance to get one of this
+      </p>
     </div>
-  </section>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="level">
+        <th mat-header-cell *matHeaderCellDef> Lvl. </th>
+        <td mat-cell *matCellDef="let element"> {{element.level}} </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef> Role </th>
+        <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="bodyType">
+        <th mat-header-cell *matHeaderCellDef> Body </th>
+        <td mat-cell *matCellDef="let element"> {{element.bodyType}} </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+
+  </div>
+  <div class="fuseButtonZone">
+    <button type="submit" id="fuseButton" mat-raised-button color="primary">
+      Simulate Fusion
+    </button>
+  </div>
 </form>

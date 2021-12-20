@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Type } from 'src/app/model/type.model';
 import { Role } from 'src/app/model/role.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Meeb } from 'src/app/model/meeb.model';
 
 @Component({
   selector: 'app-fusion-zone',
@@ -14,16 +15,18 @@ export class FusionZoneComponent implements OnInit {
   public resultBodyType = '';
   public resultMeebRole = '';
 
+  displayedColumns = ['level', 'role', 'bodyType'];
+  dataSource: Meeb[] = [];
+
   types: Array<Type> = [
     { id: 1, name: 'Fire' },
-    { id: 2, name: 'Whater' },
+    { id: 2, name: 'Water' },
     { id: 3, name: 'Electric' },
     { id: 4, name: 'Grass' },
     { id: 4, name: 'Light' },
     { id: 4, name: 'Dark' },
     { id: 4, name: 'Neutral' },
   ];
-
   roles: Array<Role> = [
     { id: 1, name: 'Support' },
     { id: 2, name: 'Mage' },
@@ -31,6 +34,46 @@ export class FusionZoneComponent implements OnInit {
     { id: 4, name: 'Hunter' },
     { id: 4, name: 'Conjurer' },
     { id: 4, name: 'Fighter' },
+  ];
+  meebs: Array<Meeb> = [
+    { level: 2, role: 'Conjurer', bodyType: 'Dark' },
+    { level: 2, role: 'Hunter', bodyType: 'Electric' },
+    { level: 2, role: 'Fighter', bodyType: 'Fire' },
+    { level: 2, role: 'Tanker', bodyType: 'Grass' },
+    { level: 2, role: 'Assassin', bodyType: 'Light' },
+    { level: 2, role: 'Assassin', bodyType: 'Water' },
+    { level: 2, role: 'Mage', bodyType: 'Dark' },
+    { level: 2, role: 'Supporter', bodyType: 'Electric' },
+    { level: 2, role: 'Tanker', bodyType: 'Fire' },
+    { level: 2, role: 'Tanker', bodyType: 'Grass' },
+    { level: 2, role: 'Fighter', bodyType: 'Light' },
+    { level: 2, role: 'Assassin', bodyType: 'Water' },
+
+    { level: 3, role: 'Tanker', bodyType: 'Dark' },
+    { level: 3, role: 'Conjurer', bodyType: 'Electric' },
+    { level: 3, role: 'Hunter', bodyType: 'Fire' },
+    { level: 3, role: 'Mage', bodyType: 'Grass' },
+    { level: 3, role: 'Fighter', bodyType: 'Light' },
+    { level: 3, role: 'Supporter', bodyType: 'Water' },
+    { level: 3, role: 'Hunter', bodyType: 'Dark' },
+    { level: 3, role: 'Fighter', bodyType: 'Electric' },
+    { level: 3, role: 'Tanker', bodyType: 'Fire' },
+    { level: 3, role: 'Conjurer', bodyType: 'Grass' },
+    { level: 3, role: 'Supporter', bodyType: 'Light' },
+    { level: 3, role: 'Conjurer', bodyType: 'Water' },
+
+    { level: 4, role: 'Assassin', bodyType: 'Dark' },
+    { level: 4, role: 'Tanker', bodyType: 'Electric' },
+    { level: 4, role: 'Hunter', bodyType: 'Fire' },
+    { level: 4, role: 'Mage', bodyType: 'Grass' },
+    { level: 4, role: 'Conjurer', bodyType: 'Light' },
+    { level: 4, role: 'Fighter', bodyType: 'Water' },
+    { level: 4, role: 'Supporter', bodyType: 'Dark' },
+    { level: 4, role: 'Fighter', bodyType: 'Electric' },
+    { level: 4, role: 'Conjurer', bodyType: 'Fire' },
+    { level: 4, role: 'Hunter', bodyType: 'Grass' },
+    { level: 4, role: 'Tanker', bodyType: 'Light' },
+    { level: 4, role: 'Assassin', bodyType: 'Water' },
   ];
 
   constructor(private fb: FormBuilder) {}
@@ -45,135 +88,211 @@ export class FusionZoneComponent implements OnInit {
   }
 
   fuseProcess() {
+    let firstBodyLevel: number =
+      this.fusionContrainer.get('firstBodyLevel')?.value;
+    let secondBodyLevel: number =
+      this.fusionContrainer.get('secondBodyLevel')?.value;
+    let firstMeebBodyType: string =
+      this.fusionContrainer.get('firstMeebBodyType')?.value;
+    let secondMeebBodyType: string =
+      this.fusionContrainer.get('secondMeebBodyType')?.value;
 
-    let firstBodyLevel: number = this.fusionContrainer.get('firstBodyLevel')?.value
-    let secondBodyLevel: number = this.fusionContrainer.get('secondBodyLevel')?.value
-    let firstMeebBodyType: string = this.fusionContrainer.get('firstMeebBodyType')?.value
-    let secondMeebBodyType: string = this.fusionContrainer.get('secondMeebBodyType')?.value;
-    
+    let higerLvl =
+      Number(firstBodyLevel) > Number(secondBodyLevel)
+        ? firstBodyLevel
+        : secondBodyLevel;
+
+    this.dataSource = [];
+    this.dataSource = this.meebs.filter(function (el) {
+      return (
+        (el.level == higerLvl &&
+          (el.bodyType == firstMeebBodyType ||
+            el.bodyType == secondMeebBodyType)) ||
+        (el.level == Number(higerLvl) + 1 &&
+          (el.bodyType == firstMeebBodyType ||
+            el.bodyType == secondMeebBodyType))
+      );
+    });
+    this.dataSource = [...this.dataSource];
+
     let max = 100;
     let min = 1;
-    let random = Math.floor(Math.random() * (max - min + 1) + min)
+    let random = Math.floor(Math.random() * (max - min + 1) + min);
 
-    this.resultLevelLabel = (firstBodyLevel == 1 && secondBodyLevel == 1) 
-                          ? ((random <= 35) ? 2 : 1)
-                          : (firstBodyLevel == 2 && secondBodyLevel == 2) 
-                          ? ((random <= 25) ? 3 : 2) 
-                          : (firstBodyLevel == 3 && secondBodyLevel == 3) 
-                          ? ((random <= 20) ? 4 : 3) 
-                          : (firstBodyLevel == 1 && secondBodyLevel == 2) || (firstBodyLevel == 2 && secondBodyLevel == 1) 
-                          ? ((random <= 10) ? 3 : 2)
-                          : (firstBodyLevel == 1 && secondBodyLevel == 3) || (firstBodyLevel == 3 && secondBodyLevel == 1) 
-                          ? ((random <= 5) ? 4 : 3)
-                          : (firstBodyLevel == 2 && secondBodyLevel == 3) || (firstBodyLevel == 3 && secondBodyLevel == 2)
-                          ? ((random <= 7) ? 4 : 3)
-                          : 0;
+    this.resultLevelLabel =
+      firstBodyLevel == 1 && secondBodyLevel == 1
+        ? random <= 35
+          ? 2
+          : 1
+        : firstBodyLevel == 2 && secondBodyLevel == 2
+        ? random <= 25
+          ? 3
+          : 2
+        : firstBodyLevel == 3 && secondBodyLevel == 3
+        ? random <= 20
+          ? 4
+          : 3
+        : (firstBodyLevel == 1 && secondBodyLevel == 2) ||
+          (firstBodyLevel == 2 && secondBodyLevel == 1)
+        ? random <= 10
+          ? 3
+          : 2
+        : (firstBodyLevel == 1 && secondBodyLevel == 3) ||
+          (firstBodyLevel == 3 && secondBodyLevel == 1)
+        ? random <= 5
+          ? 4
+          : 3
+        : (firstBodyLevel == 2 && secondBodyLevel == 3) ||
+          (firstBodyLevel == 3 && secondBodyLevel == 2)
+        ? random <= 7
+          ? 4
+          : 3
+        : 0;
 
-    this.resultBodyType = ((firstBodyLevel == 1 && secondBodyLevel == 1) 
-                          ? ( random <= 45 
-                            ? firstMeebBodyType 
-                            : random <= 90 ? secondMeebBodyType
-                            : this.types[Math.floor(Math.random() * this.types.length)].name )
-                          : (firstBodyLevel == 2 && secondBodyLevel == 2) 
-                          ? ( random <= 45 
-                            ? firstMeebBodyType 
-                            : random <= 90 ? secondMeebBodyType
-                            : this.types[Math.floor(Math.random() * this.types.length)].name )
-                          : (firstBodyLevel == 3 && secondBodyLevel == 3) 
-                          ? ( random <= 46 
-                            ? firstMeebBodyType 
-                            : random <= 92 ? secondMeebBodyType
-                            : this.types[Math.floor(Math.random() * this.types.length)].name )
-                          : (firstBodyLevel == 1 && secondBodyLevel == 2) 
-                          ? ( random <= 40 
-                            ? firstMeebBodyType 
-                            : random <= 91 ? secondMeebBodyType
-                            : this.types[Math.floor(Math.random() * this.types.length)].name )
-                          : (firstBodyLevel == 2 && secondBodyLevel == 1) 
-                          ? ( random <= 51 
-                            ? firstMeebBodyType 
-                            : random <= 91 ? secondMeebBodyType
-                            : this.types[Math.floor(Math.random() * this.types.length)].name )
-                          : (firstBodyLevel == 1 && secondBodyLevel == 3) 
-                          ? ( random <= 35 
-                            ? firstMeebBodyType 
-                            : random <= 92 ? secondMeebBodyType
-                            : this.types[Math.floor(Math.random() * this.types.length)].name )
-                          : (firstBodyLevel == 3 && secondBodyLevel == 1) 
-                          ? ( random <= 57 
-                            ? firstMeebBodyType 
-                            : random <= 92 ? secondMeebBodyType
-                            : this.types[Math.floor(Math.random() * this.types.length)].name )
-                          : (firstBodyLevel == 3 && secondBodyLevel == 2) 
-                          ? ( random <= 54 
-                            ? firstMeebBodyType 
-                            : random <= 92 ? secondMeebBodyType
-                            : this.types[Math.floor(Math.random() * this.types.length)].name )
-                          : (firstBodyLevel == 2 && secondBodyLevel == 3) 
-                          ? ( random <= 38 
-                            ? firstMeebBodyType 
-                            : random <= 92 ? secondMeebBodyType
-                            : this.types[Math.floor(Math.random() * this.types.length)].name )
-                          : ''
-    );
-    
+    random = Math.floor(Math.random() * (max - min + 1) + min);
+    this.resultBodyType =
+      firstBodyLevel == 1 && secondBodyLevel == 1
+        ? random <= 45
+          ? firstMeebBodyType
+          : random <= 90
+          ? secondMeebBodyType
+          : this.types[Math.floor(Math.random() * this.types.length)].name
+        : firstBodyLevel == 2 && secondBodyLevel == 2
+        ? random <= 45
+          ? firstMeebBodyType
+          : random <= 90
+          ? secondMeebBodyType
+          : this.types[Math.floor(Math.random() * this.types.length)].name
+        : firstBodyLevel == 3 && secondBodyLevel == 3
+        ? random <= 46
+          ? firstMeebBodyType
+          : random <= 92
+          ? secondMeebBodyType
+          : this.types[Math.floor(Math.random() * this.types.length)].name
+        : firstBodyLevel == 1 && secondBodyLevel == 2
+        ? random <= 40
+          ? firstMeebBodyType
+          : random <= 91
+          ? secondMeebBodyType
+          : this.types[Math.floor(Math.random() * this.types.length)].name
+        : firstBodyLevel == 2 && secondBodyLevel == 1
+        ? random <= 51
+          ? firstMeebBodyType
+          : random <= 91
+          ? secondMeebBodyType
+          : this.types[Math.floor(Math.random() * this.types.length)].name
+        : firstBodyLevel == 1 && secondBodyLevel == 3
+        ? random <= 35
+          ? firstMeebBodyType
+          : random <= 92
+          ? secondMeebBodyType
+          : this.types[Math.floor(Math.random() * this.types.length)].name
+        : firstBodyLevel == 3 && secondBodyLevel == 1
+        ? random <= 57
+          ? firstMeebBodyType
+          : random <= 92
+          ? secondMeebBodyType
+          : this.types[Math.floor(Math.random() * this.types.length)].name
+        : firstBodyLevel == 3 && secondBodyLevel == 2
+        ? random <= 54
+          ? firstMeebBodyType
+          : random <= 92
+          ? secondMeebBodyType
+          : this.types[Math.floor(Math.random() * this.types.length)].name
+        : firstBodyLevel == 2 && secondBodyLevel == 3
+        ? random <= 38
+          ? firstMeebBodyType
+          : random <= 92
+          ? secondMeebBodyType
+          : this.types[Math.floor(Math.random() * this.types.length)].name
+        : '';
+
     let newType = this.resultBodyType;
     let newLevel = this.resultLevelLabel;
     random = Math.floor(Math.random() * (2 - 1 + 1) + min);
 
-    this.resultMeebRole = ((newLevel == 2)
-                          ? ( 
-                            newType == 'Fire'
-                            ? random == 1 ? 'Fighter' : 'Tanker' :
-                            newType == 'Water' 
-                            ? random == 1 ? 'Assassin' : 'Assassin' :
-                            newType == 'Dark' 
-                            ? random == 1 ? 'Conjurer' : 'Mage' :
-                            newType == 'Electric' 
-                            ? random == 1 ? 'Hunter' : 'Supporter' :
-                            newType == 'Grass' 
-                            ? random == 1 ? 'Tanker' : 'Tanker' :
-                            newType == 'Light' 
-                            ? random == 1 ? 'Fighter' : 'Assassin' :
-                            // is neutral
-                            this.roles[Math.floor(Math.random() * this.roles.length)].name
-                          )
-                          : (newLevel == 3)
-                          ? (
-                            newType == 'Fire'
-                            ? random == 1 ? 'Hunter' : 'Assassin' :
-                            newType == 'Water' 
-                            ? random == 1 ? 'Supporter' : 'Conjurer' :
-                            newType == 'Dark' 
-                            ? random == 1 ? 'Tanker' : 'Hunter' :
-                            newType == 'Electric' 
-                            ? random == 1 ? 'Conjurer' : 'Fighter' :
-                            newType == 'Grass' 
-                            ? random == 1 ? 'Conjurer' : 'Mage' :
-                            newType == 'Light' 
-                            ? random == 1 ? 'Supporter' : 'Fighter' :
-                            // is neutral
-                            this.roles[Math.floor(Math.random() * this.roles.length)].name
-                          )
-                          : (newLevel == 4)
-                          ? (
-                            newType == 'Fire'
-                            ? random == 1 ? 'Hunter' : 'Conjurer' :
-                            newType == 'Water' 
-                            ? random == 1 ? 'Assassin' : 'Fighter' :
-                            newType == 'Dark' 
-                            ? random == 1 ? 'Assassin' : 'Fighter' :
-                            newType == 'Electric' 
-                            ? random == 1 ? 'Tanker' : 'Fighter' :
-                            newType == 'Grass' 
-                            ? random == 1 ? 'Hunter' : 'Mage' :
-                            newType == 'Light' 
-                            ? random == 1 ? 'Tanker' : 'Conjurer' :
-                            // is neutral
-                            this.roles[Math.floor(Math.random() * this.roles.length)].name
-                          )
-                          : ''
-    );
-                        
+    this.resultMeebRole =
+      newLevel == 2
+        ? newType == 'Fire'
+          ? random == 1
+            ? 'Fighter'
+            : 'Tanker'
+          : newType == 'Water'
+          ? random == 1
+            ? 'Assassin'
+            : 'Assassin'
+          : newType == 'Dark'
+          ? random == 1
+            ? 'Conjurer'
+            : 'Mage'
+          : newType == 'Electric'
+          ? random == 1
+            ? 'Hunter'
+            : 'Supporter'
+          : newType == 'Grass'
+          ? random == 1
+            ? 'Tanker'
+            : 'Tanker'
+          : newType == 'Light'
+          ? random == 1
+            ? 'Fighter'
+            : 'Assassin'
+          : // is neutral
+            this.roles[Math.floor(Math.random() * this.roles.length)].name
+        : newLevel == 3
+        ? newType == 'Fire'
+          ? random == 1
+            ? 'Hunter'
+            : 'Assassin'
+          : newType == 'Water'
+          ? random == 1
+            ? 'Supporter'
+            : 'Conjurer'
+          : newType == 'Dark'
+          ? random == 1
+            ? 'Tanker'
+            : 'Hunter'
+          : newType == 'Electric'
+          ? random == 1
+            ? 'Conjurer'
+            : 'Fighter'
+          : newType == 'Grass'
+          ? random == 1
+            ? 'Conjurer'
+            : 'Mage'
+          : newType == 'Light'
+          ? random == 1
+            ? 'Supporter'
+            : 'Fighter'
+          : // is neutral
+            this.roles[Math.floor(Math.random() * this.roles.length)].name
+        : newLevel == 4
+        ? newType == 'Fire'
+          ? random == 1
+            ? 'Hunter'
+            : 'Conjurer'
+          : newType == 'Water'
+          ? random == 1
+            ? 'Assassin'
+            : 'Fighter'
+          : newType == 'Dark'
+          ? random == 1
+            ? 'Assassin'
+            : 'Fighter'
+          : newType == 'Electric'
+          ? random == 1
+            ? 'Tanker'
+            : 'Fighter'
+          : newType == 'Grass'
+          ? random == 1
+            ? 'Hunter'
+            : 'Mage'
+          : newType == 'Light'
+          ? random == 1
+            ? 'Tanker'
+            : 'Conjurer'
+          : // is neutral
+            this.roles[Math.floor(Math.random() * this.roles.length)].name
+        : '';
   }
 }

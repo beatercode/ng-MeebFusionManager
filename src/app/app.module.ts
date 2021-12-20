@@ -22,16 +22,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { FusionFirstMeebComponent } from './components/fusion-first-meeb/fusion-first-meeb.component';
-import { FusionSecondMeebComponent } from './components/fusion-second-meeb/fusion-second-meeb.component';
-
 @NgModule({
   declarations: [
     AppComponent,
     TopBarComponent,
-    FusionZoneComponent,
-    FusionFirstMeebComponent,
-    FusionSecondMeebComponent
+    FusionZoneComponent
   ],
   imports: [
     BrowserModule,
